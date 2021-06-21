@@ -1,38 +1,46 @@
 import { not } from '@ember/object/computed';
 import Controller from '@ember/controller';
 import { debug } from '@ember/debug';
+import { action } from '@ember/object';
 
-export default Controller.extend({
-  boundToggle: false,
-  bV2: 'ho',
-  notToggleLabelValue: not('toggleLabelValue'),
-  toggleLabelValue: false,
+export default class ApplicationController extends Controller {
+  boundToggle = false;
+  bV2 = 'ho';
+  toggleLabelValue = false;
 
-  actions: {
-    checkboxToggled(toggled, toggledBy) {
-      this.setProperties({
-        toggled,
-        toggledBy,
-      });
-    },
+  @not('toggleLabelValue')
+  notToggleLabelValue;
 
-    clicked(target, hash) {
-      if (hash.code === 'toggled') {
-        debug('toggled: ', hash);
-      } else {
-        debug('suggestion: ', hash);
-      }
-      this.set(target, hash.newValue);
-    },
+  @action
+  checkboxToggled(toggled, toggledBy) {
+    this.setProperties({
+      toggled,
+      toggledBy,
+    });
+  }
 
-    rejected() {
-      return false;
-    },
-    notToggleLabelTest(value) {
-      this.set('toggleLabelValue', !value);
-    },
-    toggleLabelTest(value) {
-      this.set('toggleLabelValue', value);
-    },
-  },
-});
+  @action
+  clicked(target, hash) {
+    if (hash.code === 'toggled') {
+      debug('toggled: ', hash);
+    } else {
+      debug('suggestion: ', hash);
+    }
+    this.set(target, hash.newValue);
+  }
+
+  @action
+  rejected() {
+    return false;
+  }
+
+  @action
+  notToggleLabelTest(value) {
+    this.set('toggleLabelValue', !value);
+  }
+
+  @action
+  toggleLabelTest(value) {
+    this.set('toggleLabelValue', value);
+  }
+}
